@@ -1,10 +1,10 @@
 package br.ufscar.dc.atv1;
 
-import br.ufscar.dc.atv1.model.Promoção;
+import br.ufscar.dc.atv1.model.Promocao;
 import br.ufscar.dc.atv1.model.Site;
 import br.ufscar.dc.atv1.model.Teatro;
 import br.ufscar.dc.atv1.dao.SiteDAO;
-import br.ufscar.dc.atv1.dao.PromoçãoDAO;
+import br.ufscar.dc.atv1.dao.PromocaoDAO;
 import br.ufscar.dc.atv1.dao.TeatroDAO;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,26 +17,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(urlPatterns = "/")
-public class controller extends HttpServlet {
+public class Controller extends HttpServlet {
     
     private SiteDAO sitedao;
     private TeatroDAO teatrodao;
-    private PromoçãoDAO promocaodao;
+    private PromocaoDAO promocaodao;
     
     @Override
     public void init() {
         sitedao = new SiteDAO();
-    }
-    
-    @Override
-    public void init() {
         teatrodao = new TeatroDAO();
+        promocaodao = new PromocaoDAO();
     }
-    
-    @Override
-    public void init() {
-        promocaodao = new PromoçãoDAO();
-    }
+
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -99,6 +92,10 @@ public class controller extends HttpServlet {
                 case "/listaPromocoes":
                     listaPromocoes(request, response);
                     break;
+                case "/listaTeatroByCity":
+                    listaTeatrosByCity(request, response);
+                    break;
+                    
                 default:
                     listaTeatros(request, response);
                     break;
@@ -106,12 +103,21 @@ public class controller extends HttpServlet {
         } catch (RuntimeException | IOException | ServletException e) {
             throw new ServletException(e);
         }
-    }
+    }  
 
     private void listaTeatros(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Teatro> listaTeatros = teatrodao.getAll();
         request.setAttribute("listaTeatros", listaTeatros);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/listaTeatro.jsp");
+        dispatcher.forward(request, response);
+    }
+    
+    private void listaTeatrosByCity(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String cidade = request.getParameter("cidade");
+        List<Teatro> listaTeatros = teatrodao.getByCity(cidade);
+        request.setAttribute("listaTeatrosCity", listaTeatros);
         RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/listaTeatro.jsp");
         dispatcher.forward(request, response);
     }
@@ -199,13 +205,14 @@ public class controller extends HttpServlet {
     private void inserePromocao(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        int id = Integer.parseInt(request.getParameter("id"));
         String url = request.getParameter("url");
         String cnpj = request.getParameter("cnpj");
         String nome = request.getParameter("nome");
         Float preco = Float.parseFloat(request.getParameter("preco"));
         String diahorario = request.getParameter("diahorario");
 
-        Promocao promocao = new Promocao(url, cnpj, nome, preco, diahorario);
+        Promocao promocao = new Promocao(id, nome, preco, diahorario, url, cnpj);
         promocaodao.insert(promocao);
         response.sendRedirect("listaPromocao");
     }
@@ -220,7 +227,7 @@ public class controller extends HttpServlet {
         String nome = request.getParameter("nome");
         String telefone = request.getParameter("telefone");
 
-        Site site = new Site(email, senha, url, nome, telefone);
+        Site site = new Site(email, senha, nome, url, telefone);
         sitedao.update(site);
     }
     
@@ -243,13 +250,14 @@ public class controller extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
+        int id = Integer.parseInt(request.getParameter("id"));
         String url = request.getParameter("url");
         String cnpj = request.getParameter("cnpj");
         String nome = request.getParameter("nome");
         Float preco = Float.parseFloat(request.getParameter("preco"));
         String diahorario = request.getParameter("diahorario");
 
-        Promocao promocao = new Promocao(url, cnpj, nome, preco, diahorario);
+        Promocao promocao = new Promocao(id, nome, preco, diahorario, url, cnpj);
         promocaodao.update(promocao);
         response.sendRedirect("listaPromocao");
     }
