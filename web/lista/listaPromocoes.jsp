@@ -8,11 +8,11 @@
     </head>
     <body>
     <center>
-        <h1>Teatros</h1>
+        <h1>Promoções</h1>
         <h2>
-            <a href="cadastro">Cadastrar Teatro</a>
+            <!--<a href="cadastro">Cadastrar Promoções</a>-->
             &nbsp;&nbsp;&nbsp;
-            <a href="lista">Lista de teatros</a>
+            <a href="lista">Lista de Promoções</a>
 
         </h2>
     </center>
@@ -20,34 +20,37 @@
         <jsp:useBean id='bean' class='br.ufscar.dc.atv1.DynamicSelectBean'/>
         <table cellpadding="5">
             <tr>
-                    <td>Cidade</td>
+                    <td>Teatros</td>
                     <td>
-                        <select id='cidade' name='cidade' onchange='cidadeSelecionada(this.value)'>
+                        <select id='teatro' name='teatro' onchange='teatroSelecionado(this.value)'>
                             <option value='--'>--</option>
-                            <c:forEach items='${bean.cidades}' var='cidade'>
-                                <option value="null">Todas</option>
-                                <option value='${cidade}'>${cidade}</option>
+                            <c:forEach items='${bean.teatros}' var='teatro'>
+                                <option value="null">Todos</option>
+                                <option value='${teatro.CNPJ}'>${teatro.nome}</option>
                             </c:forEach>
                         </select>   
                     </td>
                 </tr>
         </table>
-            <caption><h2>Lista de Teatros</h2></caption>
+            <caption><h2>Lista de Promoções</h2></caption>
         <table border="1" cellpadding="5">
             <tr>
-                <th>Nome</th>
-                <th>CNPJ</th>
-                <th>Cidade</th>
-                <th>E-mail</th>
+                <th>Peça</th>
+                <th>Preço</th>
+                <th>Data</th>
+                <th>Site</th>
+                <th>Teatro</th>
             </tr>
             <tr id="infos">
-            <c:forEach var="teatro" items="${requestScope.listaTeatroByCity}">
+            <c:forEach var="teatro" items="${requestScope.listaPromocoes}">
                 
-                    <td><c:out value="${teatro.nome}" /></td>
-                    <td><c:out value="${teatro.cnpj}" /></td>
-                    <td><c:out value="${teatro.cidade}" /></td>
-                    <td><c:out value="${teatro.email}" /></td>                    
+                    <td><c:out value="${promocao.peça}" /></td>
+                    <td><c:out value="${promocao.preço}" /></td>
+                    <td><c:out value="${promocao.diahorario}" /></td>
+                    <td><c:out value="${promocao.site}" /></td>                    
+                    <td><c:out value="${promocao.teatro}" /></td>                    
                    <!--<td>
+                  
                         <a href="edicao?id=<>">Edição</a>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <a href="remocao?id=</>" 

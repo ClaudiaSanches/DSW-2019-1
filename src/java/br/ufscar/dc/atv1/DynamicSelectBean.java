@@ -19,4 +19,10 @@ public class DynamicSelectBean {
         TeatroDAO dao = new TeatroDAO();
         return dao.getCity();
     }
+    
+    public List<Teatro> getTeatros() {
+        TeatroDAO dao = new TeatroDAO();
+        return dao.getAll();
+    }
+    
 }

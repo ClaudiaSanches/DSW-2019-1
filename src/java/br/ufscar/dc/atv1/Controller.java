@@ -116,15 +116,28 @@ public class Controller extends HttpServlet {
     private void listaTeatrosByCity(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String cidade = request.getParameter("cidade");
-        List<Teatro> listaTeatros = teatrodao.getByCity(cidade);
-        request.setAttribute("listaTeatrosCity", listaTeatros);
+        List<Teatro> listaTeatros;
+        if (cidade.equalsIgnoreCase("null")){
+            listaTeatros = teatrodao.getAll();
+        }
+        else{
+            listaTeatros = teatrodao.getByCity(cidade);
+        }
+        request.setAttribute("listaTeatroByCity", listaTeatros);
         RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/listaTeatro.jsp");
         dispatcher.forward(request, response);
     }
     
     private void listaPromocoes(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Promocao> listaPromocoes = promocaodao.getAll();
+        String cnpj = request.getParameter("teatro");
+        List<Promocao> listaPromocoes;
+        if (cnpj.equalsIgnoreCase("null")){
+            listaPromocoes = promocaodao.getAll();
+        }
+        else{
+            listaPromocoes = promocaodao.getAllByCnpj(cnpj);
+        }
         request.setAttribute("listaPromocoes", listaPromocoes);
         RequestDispatcher dispatcher = request.getRequestDispatcher("promocao/listaPromocoes.jsp");
         dispatcher.forward(request, response);

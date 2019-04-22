@@ -131,4 +131,33 @@ public class PromocaoDAO {
         }
         return promoção;
     }
+    
+    public List<Promocao> getAllByCnpj(String cnpj) {
+        List<Promocao> listaPromoções = new ArrayList<>();
+        String sql = "SELECT * FROM Promoção WHERE teatro = ?";
+        try {
+            Connection conn = this.getConnection();
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, cnpj);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String diahorario = resultSet.getString("diahorario");
+                String peça = resultSet.getString("peça");
+                Float preço = resultSet.getFloat("preço");
+                String teatro = resultSet.getString("teatro");
+                String site = resultSet.getString("site");
+                Promocao promoção = new Promocao(id,peça,preço,diahorario,site,teatro);
+                listaPromoções.add(promoção);
+            }
+            resultSet.close();
+            statement.close();
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listaPromoções;
+    }
+    
+    
 }

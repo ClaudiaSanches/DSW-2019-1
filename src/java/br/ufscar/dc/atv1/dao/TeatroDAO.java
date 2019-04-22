@@ -158,7 +158,7 @@ public class TeatroDAO {
     
     public List<String> getCity() {
         List<String> listaCidades = new ArrayList<>();
-        String sql = "SELECT cidade FROM Teatro";
+        String sql = "SELECT DISTINCT cidade FROM Teatro";
         try {
             Connection conn = this.getConnection();
             Statement statement = conn.createStatement();
