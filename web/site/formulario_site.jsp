@@ -7,13 +7,7 @@
     </head>
     <body>
     <center>
-        <h1>Cadastro do site de vendas</h1>
-        <h2>
-            <a href="new">Adicione novo site</a>
-            &nbsp;&nbsp;&nbsp;
-            <a href="lista">Lista de sites</a>
-
-        </h2>
+        <h1>Cadastro: SITE</h1>
     </center>
     <div align="center">
         <c:if test="${site != null}">
@@ -32,8 +26,7 @@
                                 Cadastro
                             </c:if>
                         </h2>
-                    </caption>
-            
+                    </caption>            
                     <tr>
                         <th>Nome: </th>
                         <td>

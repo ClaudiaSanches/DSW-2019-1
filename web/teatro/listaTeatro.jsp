@@ -10,9 +10,8 @@
     <center>
         <h1>Teatros</h1>
         <h2>
-            <a href="cadastro">Cadastrar Teatro</a>
+            <a href="formulario_teatro.jsp">Cadastrar Teatro</a>
             &nbsp;&nbsp;&nbsp;
-            <a href="lista">Lista de teatros</a>
 
         </h2>
     </center>

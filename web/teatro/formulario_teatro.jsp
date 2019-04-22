@@ -8,12 +8,6 @@
     <body>
     <center>
         <h1>Cadastro: TEATRO</h1>
-        <h2>
-            <a href="new">Adicione novo teatro</a>
-            &nbsp;&nbsp;&nbsp;
-            <a href="lista">Lista de teatros</a>
-
-        </h2>
     </center>
     <div align="center">
         <c:if test="${teatro != null}">
@@ -32,10 +26,7 @@
                                 Cadastro
                             </c:if>
                         </h2>
-                    </caption>
-                    <c:if test="${teatro != null}">
-                        <input type="hidden" name="cnpj" value="<c:out value='${teatro.cnpj}' />" />
-                    </c:if>            
+                    </caption>           
                     <tr>
                         <th>Nome: </th>
                         <td>
@@ -53,6 +44,14 @@
                         </td>
                     </tr>
                     <tr>
+                        <th>CNPJ: </th>
+                        <td>
+                            <input type="text" name="cnpj" size="45" required
+                                   value="<c:out value='${teatro.cnpj}' />"
+                                   />
+                        </td>
+                    </tr>
+                    <tr>
                         <th>E-mail: </th>
                         <td>
                             <input type="text" name="email" size="45" required
@@ -63,7 +62,7 @@
                     <tr>
                         <th>Senha: </th>
                         <td>
-                            <input type="password" name="password" size="45" required 
+                            <input type="password" name="senha" size="45" required 
                                    value="<c:out value='${teatro.senha}' />"
                                    />
                         </td>

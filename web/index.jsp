@@ -6,15 +6,15 @@
         <title>Promoções</title>
     </head>
     <body>
+        <h1>Cadastro de sites de venda de ingressos</h1>
         <hr>
         <c:if test="${!empty mensagem}">
             ${mensagem}
-        <hr>
+            <hr>
         </c:if>
-        <h1>Cadastro de sites de venda de ingressos</h1>
         <p>Escolha o que deseja fazer:</p>
-        <a href="site/formulario_site.jsp">Sites</a><br/>
-        <a href="teatro/formulario_teatro.jsp">Cadastrar um teatro</a><br/>
-        <a href="promocao/formulario_promocao.jsp">Cadastrar uma promocao</a><br/>
+        <a href="site/listaSites.jsp">Sites</a><br/>
+        <a href="teatro/listaTeatro.jsp">Teatros</a><br/>
+        <a href="promocao/listaPromocoes.jsp">Promoções</a><br/>
     </body>
 </html>

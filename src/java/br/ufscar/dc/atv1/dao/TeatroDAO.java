@@ -31,7 +31,7 @@ public class TeatroDAO {
     }
 
     public void insert(Teatro teatro) {
-        String sql = "INSERT INTO Teatro (email,senha.cnpj.nome.cidade) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Teatro (email,senha,cnpj,nome,cidade) VALUES (?, ?, ?, ?, ?)";
         try {
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);;

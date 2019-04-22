@@ -9,10 +9,7 @@
     <center>
         <h1>Cadastro da promoção</h1>
         <h2>
-            <a href="new">Adicione nova promoção</a>
-            &nbsp;&nbsp;&nbsp;
-            <a href="lista">Lista de promoções</a>
-
+            <a href="listaPromocoes">Lista de promoções</a>
         </h2>
     </center>
     <div align="center">
