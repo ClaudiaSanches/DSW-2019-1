@@ -1,13 +1,12 @@
 package br.ufscar.dc.atv1;
 
-import br.ufscar.dc.atv1.model.Promoção;
+import br.ufscar.dc.atv1.model.Promocao;
 import br.ufscar.dc.atv1.model.Site;
 import br.ufscar.dc.atv1.model.Teatro;
 import br.ufscar.dc.atv1.dao.SiteDAO;
-import br.ufscar.dc.atv1.dao.PromoçãoDAO;
+import br.ufscar.dc.atv1.dao.PromocaoDAO;
 import br.ufscar.dc.atv1.dao.TeatroDAO;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,26 +16,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(urlPatterns = "/")
-public class controller extends HttpServlet {
+public class Controller extends HttpServlet {
     
     private SiteDAO sitedao;
     private TeatroDAO teatrodao;
-    private PromoçãoDAO promocaodao;
+    private PromocaoDAO promocaodao;
     
     @Override
     public void init() {
         sitedao = new SiteDAO();
-    }
-    
-    @Override
-    public void init() {
         teatrodao = new TeatroDAO();
+        promocaodao = new PromocaoDAO();
     }
-    
-    @Override
-    public void init() {
-        promocaodao = new PromoçãoDAO();
-    }
+
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -60,7 +52,7 @@ public class controller extends HttpServlet {
                 case "/cadastroPromocao":
                     apresentaFormCadastroPromocao(request, response);
                     break;
-                case "/insercaoSite":
+                case "/site/insercaoSite":
                     insereSite(request, response);
                     break;
                 case "/insercaoTeatro":
@@ -99,14 +91,14 @@ public class controller extends HttpServlet {
                 case "/listaPromocoes":
                     listaPromocoes(request, response);
                     break;
-                default:
-                    listaTeatros(request, response);
+                case "/listaTeatroByCity":
+                    listaTeatrosByCity(request, response);
                     break;
             }
         } catch (RuntimeException | IOException | ServletException e) {
             throw new ServletException(e);
         }
-    }
+    }  
 
     private void listaTeatros(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -116,9 +108,31 @@ public class controller extends HttpServlet {
         dispatcher.forward(request, response);
     }
     
+    private void listaTeatrosByCity(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String cidade = request.getParameter("cidade");
+        List<Teatro> listaTeatros;
+        if (cidade.equalsIgnoreCase("null")){
+            listaTeatros = teatrodao.getAll();
+        }
+        else{
+            listaTeatros = teatrodao.getByCity(cidade);
+        }
+        request.setAttribute("listaTeatroByCity", listaTeatros);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/listaTeatro.jsp");
+        dispatcher.forward(request, response);
+    }
+    
     private void listaPromocoes(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Promocao> listaPromocoes = promocaodao.getAll();
+        String cnpj = request.getParameter("teatro");
+        List<Promocao> listaPromocoes;
+        if (cnpj.equalsIgnoreCase("null")){
+            listaPromocoes = promocaodao.getAll();
+        }
+        else{
+            listaPromocoes = promocaodao.getAllByCnpj(cnpj);
+        }
         request.setAttribute("listaPromocoes", listaPromocoes);
         RequestDispatcher dispatcher = request.getRequestDispatcher("promocao/listaPromocoes.jsp");
         dispatcher.forward(request, response);
@@ -126,19 +140,19 @@ public class controller extends HttpServlet {
 
     private void apresentaFormCadastroSite(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("site/formulario.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("site/formulario_site.jsp");
         dispatcher.forward(request, response);
     }
     
     private void apresentaFormCadastroTeatro(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/formulario.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/formulario_teatro.jsp");
         dispatcher.forward(request, response);
     }
     
     private void apresentaFormCadastroPromocao(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("promocao/formulario.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("promocao/formulario_promocao.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -199,13 +213,14 @@ public class controller extends HttpServlet {
     private void inserePromocao(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        int id = Integer.parseInt(request.getParameter("id"));
         String url = request.getParameter("url");
         String cnpj = request.getParameter("cnpj");
         String nome = request.getParameter("nome");
         Float preco = Float.parseFloat(request.getParameter("preco"));
         String diahorario = request.getParameter("diahorario");
 
-        Promocao promocao = new Promocao(url, cnpj, nome, preco, diahorario);
+        Promocao promocao = new Promocao(id, nome, preco, diahorario, url, cnpj);
         promocaodao.insert(promocao);
         response.sendRedirect("listaPromocao");
     }
@@ -220,7 +235,7 @@ public class controller extends HttpServlet {
         String nome = request.getParameter("nome");
         String telefone = request.getParameter("telefone");
 
-        Site site = new Site(email, senha, url, nome, telefone);
+        Site site = new Site(email, senha, nome, url, telefone);
         sitedao.update(site);
     }
     
@@ -243,13 +258,14 @@ public class controller extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
+        int id = Integer.parseInt(request.getParameter("id"));
         String url = request.getParameter("url");
         String cnpj = request.getParameter("cnpj");
         String nome = request.getParameter("nome");
         Float preco = Float.parseFloat(request.getParameter("preco"));
         String diahorario = request.getParameter("diahorario");
 
-        Promocao promocao = new Promocao(url, cnpj, nome, preco, diahorario);
+        Promocao promocao = new Promocao(id, nome, preco, diahorario, url, cnpj);
         promocaodao.update(promocao);
         response.sendRedirect("listaPromocao");
     }
