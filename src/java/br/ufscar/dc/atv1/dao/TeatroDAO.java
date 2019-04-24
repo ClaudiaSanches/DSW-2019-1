@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 /**
  *
  * @author 743528
@@ -33,10 +34,11 @@ public class TeatroDAO {
     public void insert(Teatro teatro) {
         String sql = "INSERT INTO Teatro (email,senha,cnpj,nome,cidade) VALUES (?, ?, ?, ?, ?)";
         try {
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);;
             statement.setString(1, teatro.getEmail());
-            statement.setString(2, teatro.getSenha());
+            statement.setString(2, encoder.encode(teatro.getSenha()));
             statement.setString(3, teatro.getCNPJ());
             statement.setString(4, teatro.getNome());
             statement.setString(5, teatro.getCidade());

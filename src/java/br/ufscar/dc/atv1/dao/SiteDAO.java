@@ -14,11 +14,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 public class SiteDAO {
 
     public SiteDAO() {
-        try {
+        try {            
             Class.forName("org.apache.derby.jdbc.ClientDriver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -30,12 +32,13 @@ public class SiteDAO {
     }
 
     public void insert(Site site) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String sql = "INSERT INTO Site (email,senha,url,nome,telefone) VALUES (?, ?, ?, ?, ?)";
         try {
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);;
             statement.setString(1, site.getEmail());
-            statement.setString(2, site.getSenha());
+            statement.setString(2, encoder.encode(site.getSenha()));
             statement.setString(3, site.getUrl());
             statement.setString(4, site.getNome());
             statement.setString(5, site.getTelefone());
@@ -128,4 +131,7 @@ public class SiteDAO {
         }
         return site;
     }
+    
+   
+    
 }

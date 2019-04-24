@@ -1,4 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -11,10 +13,23 @@
             ${mensagem}
         <hr>
         </c:if>
-        <h1>Cadastro de sites de venda de ingressos</h1>
+        <h1>Cadastro de sites de venda de ingressos 
+         <%=request.getUserPrincipal().getName().toString()%></h1>
         <p>Escolha o que deseja fazer:</p>
-        <a href="listaSites">Sites</a><br/>
-        <a href="listaTeatros">Cadastrar um teatro</a><br/>
-        <a href="listaPromocoes">Cadastrar uma promocao</a><br/>
+        
+        <sec:authorize access="hasRole('ADMIN')">
+            <a href="listaSites">Gerenciar Sites</a><br/>
+            <a href="listaTeatros">Gerenciar Teatros</a><br/>
+            <a href="logout">Logout</a>
+        </sec:authorize>
+        <sec:authorize access="hasRole('TEATRO')">            
+            <a href="listaPromocoesTeatro">Gerenciar Promoções</a><br/> 
+            <a href="logout">Logout</a>
+        </sec:authorize>
+        <sec:authorize access="hasRole('SITE')">
+            <a href="listaPromocoesSite">Gerenciar Promoções</a><br/>         
+            <a href="logout">Logout</a>
+        </sec:authorize>
+        
     </body>
 </html>

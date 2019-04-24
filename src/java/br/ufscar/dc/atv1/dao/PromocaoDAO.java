@@ -158,6 +158,60 @@ public class PromocaoDAO {
         }
         return listaPromoções;
     }
+
+    public List<Promocao> getByEmailTeatro(String email) {
+        List<Promocao> listaPromoções = new ArrayList<>();
+        String sql = "SELECT * FROM Promocao WHERE cnpj = (SELECT cnpj FROM Teatro WHERE email = ?)";
+        try {
+            Connection conn = this.getConnection();
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String diahorario = resultSet.getString("diahorario");
+                String peça = resultSet.getString("peca");
+                Float preço = resultSet.getFloat("preco");
+                String teatro = resultSet.getString("cnpj");
+                String site = resultSet.getString("url");
+                Promocao promoção = new Promocao(id,peça,preço,diahorario,site,teatro);
+                listaPromoções.add(promoção);
+            }
+            resultSet.close();
+            statement.close();
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listaPromoções;    
+    }
+    
+    public List<Promocao> getByEmailSite(String email) {
+        List<Promocao> listaPromoções = new ArrayList<>();
+        String sql = "SELECT * FROM Promocao WHERE url = (SELECT url FROM Site WHERE email = ?)";
+        try {
+            Connection conn = this.getConnection();
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String diahorario = resultSet.getString("diahorario");
+                String peça = resultSet.getString("peca");
+                Float preço = resultSet.getFloat("preco");
+                String teatro = resultSet.getString("cnpj");
+                String site = resultSet.getString("url");
+                Promocao promoção = new Promocao(id,peça,preço,diahorario,site,teatro);
+                listaPromoções.add(promoção);
+            }
+            resultSet.close();
+            statement.close();
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listaPromoções;    
+    }
     
     
 }

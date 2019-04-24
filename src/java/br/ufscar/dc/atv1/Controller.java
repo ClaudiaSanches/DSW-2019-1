@@ -94,9 +94,12 @@ public class Controller extends HttpServlet {
                 case "/atualizacaoPromocao":
                     atualizePromocao(request, response);
                     break;
-                case "/listaPromocoes":
-                    listaPromocoes(request, response);
-                    break;                
+                case "/listaPromocoesSite":
+                    listaPromocoesSite(request, response);
+                    break;     
+                case "/listaPromocoesTeatro":
+                    listaPromocoesTeatro(request, response);
+                    break;
                 case "/listaTodasPromocoes":
                     apresentaListaPromocoes(request, response);                    
                     break;
@@ -120,21 +123,42 @@ public class Controller extends HttpServlet {
     
     private void listaTeatros(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Teatro> listaTeatros = teatrodao.getAll();
-        request.setAttribute("listaTeatros", listaTeatros);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/gerenciaTeatro.jsp");
-        dispatcher.forward(request, response);
-    }
-        
-    private void listaPromocoes(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String cnpj = request.getParameter("teatro");
-        List<Promocao> listaPromocoes;
-        if (cnpj == null){
-            listaPromocoes = promocaodao.getAll();
+        if(request.getUserPrincipal().getName().equals("admin@admin")){
+            List<Teatro> listaTeatros = teatrodao.getAll();
+            request.setAttribute("listaTeatros", listaTeatros);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/gerenciaTeatro.jsp");
+            dispatcher.forward(request, response);
         }
         else{
-            listaPromocoes = promocaodao.getByCnpj(cnpj);
+            //tratar
+        }
+    }
+        
+    private void listaPromocoesTeatro(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String email = request.getUserPrincipal().getName();
+        List<Promocao> listaPromocoes;
+        if (email == null){
+            listaPromocoes = promocaodao.getAll();
+            //tratar erro
+        }
+        else{
+            listaPromocoes = promocaodao.getByEmailTeatro(email);
+        }
+        request.setAttribute("listaPromocoes", listaPromocoes);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("promocao/gerenciaPromocao.jsp");
+        dispatcher.forward(request, response);
+    }
+    private void listaPromocoesSite(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String email = request.getUserPrincipal().getName();
+        List<Promocao> listaPromocoes;
+        if (email == null){
+            listaPromocoes = promocaodao.getAll();
+            //tratar erro
+        }
+        else{
+            listaPromocoes = promocaodao.getByEmailSite(email);
         }
         request.setAttribute("listaPromocoes", listaPromocoes);
         RequestDispatcher dispatcher = request.getRequestDispatcher("promocao/gerenciaPromocao.jsp");
@@ -313,10 +337,16 @@ public class Controller extends HttpServlet {
 
     private void listaSites(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Site> listaSites = sitedao.getAll();
-        request.setAttribute("listaSites", listaSites);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("site/gerenciaSite.jsp");
-        dispatcher.forward(request, response);
+        if(request.getUserPrincipal().getName().equals("admin@admin")){
+            List<Site> listaSites = sitedao.getAll();
+            request.setAttribute("listaSites", listaSites);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("site/gerenciaSite.jsp");
+            dispatcher.forward(request, response);
+        }
+        else{
+            //tratar erro
+        }
+        
     }
     
 }
