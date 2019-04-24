@@ -26,11 +26,11 @@ public class SiteDAO {
     }
 
     protected Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:derby://localhost:1527/SiteIngresso", "root", "root");
+        return DriverManager.getConnection("jdbc:derby://localhost:1527/SiteIngressos", "root", "root");
     }
 
     public void insert(Site site) {
-        String sql = "INSERT INTO Site (email,senha.url.nome.telefone) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Site (email,senha,url,nome,telefone) VALUES (?, ?, ?, ?, ?)";
         try {
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);;
@@ -56,7 +56,7 @@ public class SiteDAO {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 String telefone = resultSet.getString("telefone");
-                String nome = resultSet.getString("titulo");
+                String nome = resultSet.getString("nome");
                 String url = resultSet.getString("url");
                 String email = resultSet.getString("email");
                 String senha = resultSet.getString("senha");

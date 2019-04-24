@@ -7,7 +7,6 @@ import br.ufscar.dc.atv1.dao.SiteDAO;
 import br.ufscar.dc.atv1.dao.PromocaoDAO;
 import br.ufscar.dc.atv1.dao.TeatroDAO;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -47,57 +46,65 @@ public class Controller extends HttpServlet {
                 case "/cadastroSite":
                     apresentaFormCadastroSite(request, response);
                     break;
-                case "/cadastroTeatro":
-                    apresentaFormCadastroTeatro(request, response);
-                    break;
-                case "/cadastroPromocao":
-                    apresentaFormCadastroPromocao(request, response);
-                    break;
                 case "/insercaoSite":
                     insereSite(request, response);
-                    break;
-                case "/insercaoTeatro":
-                    insereTeatro(request, response);
-                    break;
-                case "/insercaoPromocao":
-                    inserePromocao(request, response);
                     break;
                 case "/remocaoSite":
                     removeSite(request, response);
                     break;
-                case "/remocaoTeatro":
-                    removeTeatro(request, response);
-                    break;
-                case "/remocaoPromocao":
-                    removePromocao(request, response);
-                    break;
                 case "/edicaoSite":
                     apresentaFormEdicaoSite(request, response);
-                    break;
-                case "/edicaoTeatro":
-                    apresentaFormEdicaoTeatro(request, response);
-                    break;
-                case "/edicaoPromocao":
-                    apresentaFormEdicaoPromocao(request, response);
                     break;
                 case "/atualizacaoSite":
                     atualizeSite(request, response);
                     break;
+                case "/cadastroTeatro":
+                    apresentaFormCadastroTeatro(request, response);
+                    break;
+                case "/insercaoTeatro":
+                    insereTeatro(request, response);
+                    break;
+                case "/remocaoTeatro":
+                    removeTeatro(request, response);
+                    break;
+                case "edicaoTeatro":
+                    apresentaFormEdicaoTeatro(request, response);
+                    break;
                 case "/atualizacaoTeatro":
                     atualizeTeatro(request, response);
                     break;
+                case "/listaTeatros":
+                    listaTeatros(request, response);                    
+                    break;
+                case "/listaTodosTeatros":
+                    apresentaListaTeatros(request, response);                    
+                    break;                    
+                case "/cadastroPromocao":
+                    apresentaFormCadastroPromocao(request, response);
+                    break;                                
+                case "/insercaoPromocao":
+                    inserePromocao(request, response);
+                    break;                                
+                case "/remocaoPromocao":
+                    removePromocao(request, response);
+                    break;                                
+                case "/edicaoPromocao":
+                    apresentaFormEdicaoPromocao(request, response);
+                    break;                                
                 case "/atualizacaoPromocao":
                     atualizePromocao(request, response);
                     break;
                 case "/listaPromocoes":
                     listaPromocoes(request, response);
+                    break;                
+                case "/listaTodasPromocoes":
+                    apresentaListaPromocoes(request, response);                    
                     break;
-                case "/listaTeatroByCity":
-                    listaTeatrosByCity(request, response);
+                case "/listaSites":
+                    listaSites(request, response);
                     break;
-                    
-                default:
-                    listaTeatros(request, response);
+                default:    
+                    openIndex(request, response);
                     break;
             }
         } catch (RuntimeException | IOException | ServletException e) {
@@ -105,59 +112,62 @@ public class Controller extends HttpServlet {
         }
     }  
 
+    private void openIndex(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        dispatcher.forward(request, response);
+    }
+    
     private void listaTeatros(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Teatro> listaTeatros = teatrodao.getAll();
         request.setAttribute("listaTeatros", listaTeatros);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/listaTeatro.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/gerenciaTeatro.jsp");
         dispatcher.forward(request, response);
     }
-    
-    private void listaTeatrosByCity(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String cidade = request.getParameter("cidade");
-        List<Teatro> listaTeatros;
-        if (cidade.equalsIgnoreCase("null")){
-            listaTeatros = teatrodao.getAll();
-        }
-        else{
-            listaTeatros = teatrodao.getByCity(cidade);
-        }
-        request.setAttribute("listaTeatroByCity", listaTeatros);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/listaTeatro.jsp");
-        dispatcher.forward(request, response);
-    }
-    
+        
     private void listaPromocoes(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String cnpj = request.getParameter("teatro");
         List<Promocao> listaPromocoes;
-        if (cnpj.equalsIgnoreCase("null")){
+        if (cnpj == null){
             listaPromocoes = promocaodao.getAll();
         }
         else{
-            listaPromocoes = promocaodao.getAllByCnpj(cnpj);
+            listaPromocoes = promocaodao.getByCnpj(cnpj);
         }
         request.setAttribute("listaPromocoes", listaPromocoes);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("promocao/listaPromocoes.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("promocao/gerenciaPromocao.jsp");
+        dispatcher.forward(request, response);
+    }
+    
+    private void apresentaListaTeatros(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("listaTeatro.jsp");
+        dispatcher.forward(request, response);
+    }
+    
+    private void apresentaListaPromocoes(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("listaPromocoes.jsp");
         dispatcher.forward(request, response);
     }
 
     private void apresentaFormCadastroSite(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("site/formulario.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("site/formulario_site.jsp");
         dispatcher.forward(request, response);
     }
     
     private void apresentaFormCadastroTeatro(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/formulario.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/formulario_teatro.jsp");
         dispatcher.forward(request, response);
     }
     
     private void apresentaFormCadastroPromocao(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("promocao/formulario.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("promocao/formulario_promocao.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -165,7 +175,7 @@ public class Controller extends HttpServlet {
             throws ServletException, IOException {
         String url = request.getParameter("url");
         Site site = sitedao.get(url);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("site/formulario.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("site/formulario_site.jsp");
         request.setAttribute("site", site);
         dispatcher.forward(request, response);
     }
@@ -204,7 +214,7 @@ public class Controller extends HttpServlet {
     private void insereTeatro(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String email = request.getParameter("titulo");
+        String email = request.getParameter("email");
         String senha = request.getParameter("senha");
         String cnpj = request.getParameter("cnpj");
         String nome = request.getParameter("nome");
@@ -248,7 +258,7 @@ public class Controller extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-        String email = request.getParameter("titulo");
+        String email = request.getParameter("email");
         String senha = request.getParameter("senha");
         String cnpj = request.getParameter("cnpj");
         String nome = request.getParameter("nome");
@@ -300,4 +310,13 @@ public class Controller extends HttpServlet {
         promocaodao.delete(sale);
         response.sendRedirect("listaPromocao");
     }
+
+    private void listaSites(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        List<Site> listaSites = sitedao.getAll();
+        request.setAttribute("listaSites", listaSites);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("site/gerenciaSite.jsp");
+        dispatcher.forward(request, response);
+    }
+    
 }

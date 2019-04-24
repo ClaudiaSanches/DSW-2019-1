@@ -27,11 +27,11 @@ public class PromocaoDAO {
     }
 
     protected Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:derby://localhost:1527/SiteIngresso", "root", "root");
+        return DriverManager.getConnection("jdbc:derby://localhost:1527/SiteIngressos", "root", "root");
     }
 
     public void insert(Promocao promoção) {
-        String sql = "INSERT INTO Promoção (peça,preço,diahorario,teatro,site) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Promocao (peca,preco,diahorario,cnpj,url) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);;
@@ -50,7 +50,7 @@ public class PromocaoDAO {
 
     public List<Promocao> getAll() {
         List<Promocao> listaPromoções = new ArrayList<>();
-        String sql = "SELECT * FROM Promoção";
+        String sql = "SELECT * FROM Promocao";
         try {
             Connection conn = this.getConnection();
             Statement statement = conn.createStatement();
@@ -58,10 +58,10 @@ public class PromocaoDAO {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String diahorario = resultSet.getString("diahorario");
-                String peça = resultSet.getString("peça");
-                Float preço = resultSet.getFloat("preço");
-                String teatro = resultSet.getString("teatro");
-                String site = resultSet.getString("site");
+                String peça = resultSet.getString("peca");
+                Float preço = resultSet.getFloat("preco");
+                String teatro = resultSet.getString("cnpj");
+                String site = resultSet.getString("url");
                 Promocao promoção = new Promocao(id,peça,preço,diahorario,site,teatro);
                 listaPromoções.add(promoção);
             }
@@ -75,7 +75,7 @@ public class PromocaoDAO {
     }
 
     public void delete(Promocao promoção) {
-        String sql = "DELETE FROM Promoção where id = ?";
+        String sql = "DELETE FROM Promocao where id = ?";
         try {
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
@@ -89,7 +89,7 @@ public class PromocaoDAO {
     }
 
     public void update(Promocao promoção) {
-        String sql = "UPDATE Promoção SET peça = ?, preço = ?, diahorario = ?, site = ?, teatro = ?";
+        String sql = "UPDATE Promoção SET peca = ?, preco = ?, diahorario = ?, site = ?, teatro = ?";
         sql += " WHERE id = ?";
         try {
             Connection conn = this.getConnection();
@@ -109,7 +109,7 @@ public class PromocaoDAO {
 
     public Promocao get(int id) {
         Promocao promoção = null;
-        String sql = "SELECT * FROM Promoção WHERE id = ?";
+        String sql = "SELECT * FROM Promocao WHERE id = ?";
         try {
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
@@ -132,9 +132,9 @@ public class PromocaoDAO {
         return promoção;
     }
     
-    public List<Promocao> getAllByCnpj(String cnpj) {
+    public List<Promocao> getByCnpj(String cnpj) {
         List<Promocao> listaPromoções = new ArrayList<>();
-        String sql = "SELECT * FROM Promoção WHERE teatro = ?";
+        String sql = "SELECT * FROM Promocao WHERE cnpj = ?";
         try {
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
@@ -143,10 +143,10 @@ public class PromocaoDAO {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String diahorario = resultSet.getString("diahorario");
-                String peça = resultSet.getString("peça");
-                Float preço = resultSet.getFloat("preço");
-                String teatro = resultSet.getString("teatro");
-                String site = resultSet.getString("site");
+                String peça = resultSet.getString("peca");
+                Float preço = resultSet.getFloat("preco");
+                String teatro = resultSet.getString("cnpj");
+                String site = resultSet.getString("url");
                 Promocao promoção = new Promocao(id,peça,preço,diahorario,site,teatro);
                 listaPromoções.add(promoção);
             }

@@ -27,11 +27,11 @@ public class TeatroDAO {
     }
 
     protected Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:derby://localhost:1527/SiteIngresso", "root", "root");
+        return DriverManager.getConnection("jdbc:derby://localhost:1527/SiteIngressos", "root", "root");
     }
 
     public void insert(Teatro teatro) {
-        String sql = "INSERT INTO Teatro (email,senha.cnpj.nome.cidade) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Teatro (email,senha,cnpj,nome,cidade) VALUES (?, ?, ?, ?, ?)";
         try {
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);;
@@ -57,7 +57,7 @@ public class TeatroDAO {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 String cidade = resultSet.getString("cidade");
-                String nome = resultSet.getString("titulo");
+                String nome = resultSet.getString("nome");
                 String cnpj = resultSet.getString("cnpj");
                 String email = resultSet.getString("email");
                 String senha = resultSet.getString("senha");
@@ -138,13 +138,12 @@ public class TeatroDAO {
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, city);
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                String cidade = resultSet.getString("cidade");
-                String nome = resultSet.getString("titulo");
+            while (resultSet.next()) {                
+                String nome = resultSet.getString("nome");
                 String cnpj = resultSet.getString("cnpj");
                 String email = resultSet.getString("email");
                 String senha = resultSet.getString("senha");
-                Teatro teatro = new Teatro(email, senha, cnpj, nome, cidade);
+                Teatro teatro = new Teatro(email, senha, cnpj, nome, city);
                 listaTeatros.add(teatro);
             }
             resultSet.close();
@@ -176,4 +175,3 @@ public class TeatroDAO {
         return listaCidades;
     }
 }
-
