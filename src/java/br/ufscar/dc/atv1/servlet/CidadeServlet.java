@@ -18,11 +18,17 @@ public class CidadeServlet extends HttpServlet {
 
         response.setContentType("text/html;charset=UTF-8");
         String cidade = request.getParameter("cidade");
-       String buffer = null;
-        List<Teatro> teatros = new DynamicSelectBean().getTeatros(cidade);
+        String buffer = "";
+        List<Teatro> teatros;
+        if("null".equals(cidade)){
+            teatros = new DynamicSelectBean().getTeatros();
+        }
+        else{
+            teatros = new DynamicSelectBean().getTeatrosByCity(cidade);
+        }
         for (Teatro teatro : teatros) {
-            buffer = "<td>"+teatro.getNome()+"</td><td>"+teatro.getCNPJ()+"</td><td>"+teatro.getCidade()+"</td><td>"+teatro.getEmail()+"</td>";
-        }        
+            buffer = buffer + "<tr><td>"+teatro.getNome()+"</td><td>"+teatro.getCNPJ()+"</td><td>"+teatro.getCidade()+"</td><td>"+teatro.getEmail()+"</td></tr>";
+        }   
         response.getWriter().println(buffer);
     }
 
