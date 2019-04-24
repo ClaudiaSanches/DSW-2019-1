@@ -56,7 +56,7 @@ public class SiteDAO {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 String telefone = resultSet.getString("telefone");
-                String nome = resultSet.getString("titulo");
+                String nome = resultSet.getString("nome");
                 String url = resultSet.getString("url");
                 String email = resultSet.getString("email");
                 String senha = resultSet.getString("senha");

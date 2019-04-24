@@ -13,8 +13,8 @@
         </c:if>
         <h1>Cadastro de sites de venda de ingressos</h1>
         <p>Escolha o que deseja fazer:</p>
-        <a href="site/formulario_site.jsp">Sites</a><br/>
-        <a href="teatro/formulario_teatro.jsp">Cadastrar um teatro</a><br/>
-        <a href="promocao/formulario_promocao.jsp">Cadastrar uma promocao</a><br/>
+        <a href="listaSites">Sites</a><br/>
+        <a href="listaTeatros">Cadastrar um teatro</a><br/>
+        <a href="listaPromocoes">Cadastrar uma promocao</a><br/>
     </body>
 </html>

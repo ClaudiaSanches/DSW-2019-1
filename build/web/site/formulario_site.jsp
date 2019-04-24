@@ -3,15 +3,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
     <head>
-        <title>Cadastro</title>
+        <title>Promoção de Ingressos</title>
     </head>
     <body>
     <center>
         <h1>Cadastro do site de vendas</h1>
         <h2>
-            <a href="new">Adicione novo site</a>
-            &nbsp;&nbsp;&nbsp;
-            <a href="lista">Lista de sites</a>
+            <a href="listaSites">Lista de sites</a>
 
         </h2>
     </center>

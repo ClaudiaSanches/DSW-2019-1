@@ -10,16 +10,14 @@
     <center>
         <h1>Teatros</h1>
         <h2>
-            <a href="cadastro">Cadastrar Teatro</a>
+            <a href="cadastroTeatro">Cadastrar Teatro</a>
             &nbsp;&nbsp;&nbsp;
-            <a href="lista">Lista de teatros</a>
+            <a href="listaTodosTeatros">Lista de todos os Teatros</a>
 
         </h2>
     </center>
     <div align="center">
         
-           <jsp:useBean id='teatros' class='br.ufscar.dc.atv1.Lista'/>
-
             <caption><h2>Lista de Teatros</h2></caption>
         <table border="1" cellpadding="5">
             <tr>
@@ -29,21 +27,21 @@
                 <th>E-mail</th>
                 <th></th>
             </tr>
-            
-                <c:forEach items='${teatros.teatros}' var='teatro'>
-              <tr id='infos'>  
-                    <td>${teatro.nome}</td>
-                        <td>${teatro.CNPJ}</td>
-                    <td>${teatro.cidade}</td>
-                    <td>${teatro.email}</td>                    
+            <c:forEach var="teatro" items="${requestScope.listaTeatro}">
+              <tr>  
+                    <td><c:out value="${teatro.nome}" /></td>
+                        <td><c:out value="${teatro.CNPJ}"/></td>
+                    <td><c:out value="${teatro.cidade}"/></td>
+                    <td><c:out value="${teatro.email}"/></td>                    
                    <td>
-                        <a href="edicaoTeatro?id=<>">Edição</a>
+                        <a href="edicaoTeatro?id=<c:out value='${teatro.cnpj}' />">Edição</a>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <a href="remocaoTeatro?id=</>" 
+                        <a href="remocaoTeatro?id=<c:out value='${teatro.cnpj}' />" 
                            onclick="return confirm('Tem certeza de que deseja excluir este item?');">
                             Remoção
                         </a>                    	
-                    </td></tr>
+                    </td>
+              </tr>
            </c:forEach>
                 
         </table>

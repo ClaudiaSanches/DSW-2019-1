@@ -3,44 +3,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
     <head>
-        <title>Cadastro</title>
+        <title>Promoção de Ingressos</title>
     </head>
     <body>
     <center>
-        <h1>Cadastro da promoção</h1>
-        <h2>
-            <a href="new">Adicione nova promoção</a>
-            &nbsp;&nbsp;&nbsp;
-            <a href="lista">Lista de promoções</a>
-            <table border="1" cellpadding="5">
-            <tr>
-                <th>Peça</th>
-                <th>Preço</th>
-                <th>Data</th>
-                <th>Site</th>
-                <th>Teatro</th>
-            </tr>
-            <tr id="infos">
-            <c:forEach var="teatro" items="${requestScope.listaPromocoes}">
-                
-                    <td><c:out value="${promocao.peça}" /></td>
-                    <td><c:out value="${promocao.preço}" /></td>
-                    <td><c:out value="${promocao.diahorario}" /></td>
-                    <td><c:out value="${promocao.site}" /></td>                    
-                    <td><c:out value="${promocao.teatro}" /></td>                    
-                   <td>
-                  
-                        <a href="edicao?id=<>">Edição</a>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <a href="remocao?id=</>" 
-                           onclick="return confirm('Tem certeza de que deseja excluir este item?');">
-                            Remoção
-                        </a>                    	
-                    </td>
-                </tr>
-            </c:forEach>
-        </table>
-
+        <h1>Cadastro de Promoção</h1>
+        <h2>            
+            <a href="listaPromocoes">Lista de promoções</a>          
         </h2>
     </center>
     <div align="center">
