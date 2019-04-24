@@ -61,7 +61,11 @@
                 <th>Teatro</th>
             </tr>
             <tbody id="infos">
-                           
+					<td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>   
+                    <td> </td>        
             </tbody>
         </table>
     </div>	

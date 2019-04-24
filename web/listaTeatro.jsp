@@ -62,12 +62,12 @@
                     <th>Cidade</th>
                     <th>E-mail</th>
                 </tr>
-                <tbody id="infos"
+                <tbody id="infos">
                 <tr>                
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>                 
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>                 
                 </tr>   
             </table>
             </form>
