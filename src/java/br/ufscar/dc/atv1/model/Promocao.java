@@ -11,8 +11,8 @@ package br.ufscar.dc.atv1.model;
  */
 public class Promocao {
     private int id;
-    private String peça;
-    private float preço;
+    private String nome;
+    private float preco;
     private String diahorario;
     private String site;
     private String teatro;
@@ -31,29 +31,29 @@ public class Promocao {
     
        
 
-    public Promocao(int id, String peça, float preço, String diahorario, String site, String teatro) {
+    public Promocao(int id, String nome, float preco, String diahorario, String site, String teatro) {
         this.id = id;
-        this.peça = peça;
-        this.preço = preço;
+        this.nome = nome;
+        this.preco = preco;
         this.diahorario = diahorario;
         this.site = site;
         this.teatro = teatro;
     }
 
     public String getPeça() {
-        return peça;
+        return nome;
     }
 
-    public void setPeça(String peça) {
-        this.peça = peça;
+    public void setPeça(String nome) {
+        this.nome = nome;
     }
 
-    public float getPreço() {
-        return preço;
+    public float getPreco() {
+        return preco;
     }
 
-    public void setPreço(float preço) {
-        this.preço = preço;
+    public void setPreco(float preco) {
+        this.preco = preco;
     }
 
 

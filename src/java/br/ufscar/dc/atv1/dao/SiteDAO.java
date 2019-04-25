@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package br.ufscar.dc.atv1.dao;
 
 import br.ufscar.dc.atv1.model.Site;
@@ -9,11 +14,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 public class SiteDAO {
 
     public SiteDAO() {
-        try {
+        try {            
             Class.forName("org.apache.derby.jdbc.ClientDriver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -25,15 +32,15 @@ public class SiteDAO {
     }
 
     public void insert(Site site) {
-        String sql = "INSERT INTO Site (email,senha,url,nome,telefone) VALUES (?, ?, ?, ?, ?)";
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String sql = "INSERT INTO Site (email,url,nome,telefone) VALUES (?, ?, ?, ?, ?)";
         try {
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);;
             statement.setString(1, site.getEmail());
-            statement.setString(2, site.getSenha());
-            statement.setString(3, site.getUrl());
-            statement.setString(4, site.getNome());
-            statement.setString(5, site.getTelefone());
+            statement.setString(2, site.getUrl());
+            statement.setString(3, site.getNome());
+            statement.setString(4, site.getTelefone());
             statement.executeUpdate();
             statement.close();
             conn.close();
@@ -51,11 +58,10 @@ public class SiteDAO {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 String telefone = resultSet.getString("telefone");
-                String nome = resultSet.getString("titulo");
+                String nome = resultSet.getString("nome");
                 String url = resultSet.getString("url");
                 String email = resultSet.getString("email");
-                String senha = resultSet.getString("senha");
-                Site site = new Site(email, senha, nome, url, telefone);
+                Site site = new Site(email, nome, url, telefone);
                 listaSites.add(site);
             }
             resultSet.close();
@@ -82,16 +88,15 @@ public class SiteDAO {
     }
 
     public void update(Site site) {
-        String sql = "UPDATE Site SET nome = ?, email = ?, senha = ?, telefone = ?";
+        String sql = "UPDATE Site SET nome = ?, email = ?, telefone = ?";
         sql += " WHERE url = ?";
         try {
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, site.getNome());
             statement.setString(2, site.getEmail());
-            statement.setString(3, site.getSenha());
-            statement.setString(4, site.getTelefone());
-            statement.setString(5, site.getUrl());
+            statement.setString(3, site.getTelefone());
+            statement.setString(4, site.getUrl());
             statement.executeUpdate();
             statement.close();
             conn.close();
@@ -111,9 +116,8 @@ public class SiteDAO {
             if (resultSet.next()) {
                 String nome = resultSet.getString("nome");
                 String email = resultSet.getString("email");
-                String senha = resultSet.getString("senha");
                 String telefone = resultSet.getString("telefone");
-                site = new Site(email, senha, nome, url, telefone);
+                site = new Site(email, nome, url, telefone);
             }
             resultSet.close();
             statement.close();
@@ -123,4 +127,7 @@ public class SiteDAO {
         }
         return site;
     }
+    
+   
+    
 }

@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 /**
  *
  * @author 743528
@@ -31,15 +32,15 @@ public class TeatroDAO {
     }
 
     public void insert(Teatro teatro) {
-        String sql = "INSERT INTO Teatro (email,senha,cnpj,nome,cidade) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Teatro (email,cnpj,nome,cidade) VALUES (?, ?, ?, ?, ?)";
         try {
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);;
             statement.setString(1, teatro.getEmail());
-            statement.setString(2, teatro.getSenha());
-            statement.setString(3, teatro.getCNPJ());
-            statement.setString(4, teatro.getNome());
-            statement.setString(5, teatro.getCidade());
+            statement.setString(2, teatro.getCNPJ());
+            statement.setString(3, teatro.getNome());
+            statement.setString(4, teatro.getCidade());
             statement.executeUpdate();
             statement.close();
             conn.close();
@@ -57,11 +58,10 @@ public class TeatroDAO {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 String cidade = resultSet.getString("cidade");
-                String nome = resultSet.getString("titulo");
+                String nome = resultSet.getString("nome");
                 String cnpj = resultSet.getString("cnpj");
                 String email = resultSet.getString("email");
-                String senha = resultSet.getString("senha");
-                Teatro teatro = new Teatro(email, senha, cnpj, nome, cidade);
+                Teatro teatro = new Teatro(email, cnpj, nome, cidade);
                 listaTeatros.add(teatro);
             }
             resultSet.close();
@@ -88,16 +88,15 @@ public class TeatroDAO {
     }
 
     public void update(Teatro teatro) {
-        String sql = "UPDATE Teatro SET nome = ?, email = ?, senha = ?, cidade = ?";
+        String sql = "UPDATE Teatro SET nome = ?, email = ?, cidade = ?";
         sql += " WHERE cnpj = ?";
         try {
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, teatro.getNome());
             statement.setString(2, teatro.getEmail());
-            statement.setString(3, teatro.getSenha());
-            statement.setString(4, teatro.getCidade());
-            statement.setString(5, teatro.getCNPJ());
+            statement.setString(3, teatro.getCidade());
+            statement.setString(4, teatro.getCNPJ());
             statement.executeUpdate();
             statement.close();
             conn.close();
@@ -117,9 +116,8 @@ public class TeatroDAO {
             if (resultSet.next()) {
                 String nome = resultSet.getString("nome");
                 String email = resultSet.getString("email");
-                String senha = resultSet.getString("senha");
                 String cidade = resultSet.getString("cidade");
-                teatro = new Teatro(email, senha, cnpj, nome, cidade);
+                teatro = new Teatro(email, cnpj, nome, cidade);
             }
             resultSet.close();
             statement.close();
@@ -138,13 +136,11 @@ public class TeatroDAO {
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, city);
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                String cidade = resultSet.getString("cidade");
-                String nome = resultSet.getString("titulo");
+            while (resultSet.next()) {                
+                String nome = resultSet.getString("nome");
                 String cnpj = resultSet.getString("cnpj");
                 String email = resultSet.getString("email");
-                String senha = resultSet.getString("senha");
-                Teatro teatro = new Teatro(email, senha, cnpj, nome, cidade);
+                Teatro teatro = new Teatro(email, cnpj, nome, city);
                 listaTeatros.add(teatro);
             }
             resultSet.close();
