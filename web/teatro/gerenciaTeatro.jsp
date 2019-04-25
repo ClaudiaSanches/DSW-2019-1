@@ -27,16 +27,16 @@
                 <th>E-mail</th>
                 <th></th>
             </tr>
-            <c:forEach var="teatro" items="${requestScope.listaTeatro}">
+            <c:forEach var="teatro" items="${requestScope.listaTeatros}">
               <tr>  
                     <td><c:out value="${teatro.nome}" /></td>
                         <td><c:out value="${teatro.CNPJ}"/></td>
                     <td><c:out value="${teatro.cidade}"/></td>
                     <td><c:out value="${teatro.email}"/></td>                    
                    <td>
-                        <a href="edicaoTeatro?id=<c:out value='${teatro.cnpj}' />">Edição</a>
+                        <a href="edicaoTeatro?id=<c:out value='${teatro.CNPJ}' />">Edição</a>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <a href="remocaoTeatro?id=<c:out value='${teatro.cnpj}' />" 
+                        <a href="remocaoTeatro?id=<c:out value='${teatro.CNPJ}' />" 
                            onclick="return confirm('Tem certeza de que deseja excluir este item?');">
                             Remoção
                         </a>                    	

@@ -117,13 +117,13 @@ public class Controller extends HttpServlet {
 
     private void openIndex(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
         dispatcher.forward(request, response);
     }
     
     private void listaTeatros(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if(request.getUserPrincipal().getName().equals("admin@admin")){
+        if("admin@admin".equals(request.getUserPrincipal().getName())){
             List<Teatro> listaTeatros = teatrodao.getAll();
             request.setAttribute("listaTeatros", listaTeatros);
             RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/gerenciaTeatro.jsp");
@@ -231,8 +231,8 @@ public class Controller extends HttpServlet {
         String nome = request.getParameter("nome");
         String telefone = request.getParameter("telefone");
 
-        Site site = new Site(email, senha, url, nome, telefone);
-        sitedao.insert(site);
+        Site site = new Site(email, url, nome, telefone);
+        sitedao.insert(site,senha);
     }
     
     private void insereTeatro(HttpServletRequest request, HttpServletResponse response)
@@ -244,8 +244,8 @@ public class Controller extends HttpServlet {
         String nome = request.getParameter("nome");
         String cidade = request.getParameter("cidade");
 
-        Teatro teatro = new Teatro(email, senha, cnpj, nome, cidade);
-        teatrodao.insert(teatro);
+        Teatro teatro = new Teatro(email, cnpj, nome, cidade);
+        teatrodao.insert(teatro,senha);
         response.sendRedirect("listaTeatro");
     }
     
@@ -274,8 +274,8 @@ public class Controller extends HttpServlet {
         String nome = request.getParameter("nome");
         String telefone = request.getParameter("telefone");
 
-        Site site = new Site(email, senha, nome, url, telefone);
-        sitedao.update(site);
+        Site site = new Site(email, nome, url, telefone);
+        sitedao.update(site,senha);
     }
     
     private void atualizeTeatro(HttpServletRequest request, HttpServletResponse response)
@@ -288,8 +288,8 @@ public class Controller extends HttpServlet {
         String nome = request.getParameter("nome");
         String cidade = request.getParameter("cidade");
 
-        Teatro teatro = new Teatro(email, senha, cnpj, nome, cidade);
-        teatrodao.update(teatro);
+        Teatro teatro = new Teatro(email, cnpj, nome, cidade);
+        teatrodao.update(teatro,senha);
         response.sendRedirect("listaTeatro");
     }
     
