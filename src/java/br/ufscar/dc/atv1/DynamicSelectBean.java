@@ -18,17 +18,17 @@ import java.util.List;
 
 public class DynamicSelectBean {
     
-    public List<String> getCidades() {
+    public List<String> getCidades() throws ClassNotFoundException {
         TeatroDAO dao = new TeatroDAO();
         return dao.getCity();
     }
     
-    public List<Teatro> getTeatrosByCity(String city) {        
+    public List<Teatro> getTeatrosByCity(String city) throws ClassNotFoundException {        
         TeatroDAO dao = new TeatroDAO();
         return dao.getByCity(city);        
     }
     
-    public List<Teatro> getTeatros() {        
+    public List<Teatro> getTeatros() throws ClassNotFoundException {        
         TeatroDAO dao = new TeatroDAO();
         return dao.getAll();        
     }
@@ -43,12 +43,12 @@ public class DynamicSelectBean {
         return dao.getByCnpj(cnpj);
     }
     
-    public String getTeatroNome(String cnpj){
+    public String getTeatroNome(String cnpj) throws ClassNotFoundException{
         TeatroDAO dao = new TeatroDAO();
         return dao.get(cnpj).getNome();
     }
     
-    public String getSiteNome(String url){
+    public String getSiteNome(String url) throws ClassNotFoundException{
         SiteDAO dao = new SiteDAO();
         return dao.get(url).getNome();
     }

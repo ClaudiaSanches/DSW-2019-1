@@ -18,16 +18,16 @@
         <p>Escolha o que deseja fazer:</p>
         
         <sec:authorize access="hasRole('ADMIN')">
-            <a href="listaSites">Gerenciar Sites</a><br/>
-            <a href="listaTeatros">Gerenciar Teatros</a><br/>
+            <a href="admin/listaSites">Gerenciar Sites</a><br/>
+            <a href="admin/listaTeatros">Gerenciar Teatros</a><br/>
             <a href="logout">Logout</a>
         </sec:authorize>
         <sec:authorize access="hasRole('TEATRO')">            
-            <a href="listaPromocoesTeatro">Gerenciar Promoções</a><br/> 
+            <a href="teatro/listaPromocoesTeatro">Gerenciar Promoções</a><br/> 
             <a href="logout">Logout</a>
         </sec:authorize>
         <sec:authorize access="hasRole('SITE')">
-            <a href="listaPromocoesSite">Gerenciar Promoções</a><br/>         
+            <a href="site/listaPromocoesSite">Promoções do Site</a><br/>         
             <a href="logout">Logout</a>
         </sec:authorize>
         

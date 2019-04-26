@@ -1,6 +1,6 @@
 package br.ufscar.dc.atv1;
 
-import br.ufscar.dc.atv1.JDBCUtil;
+import br.ufscar.dc.atv1.login.JDBCUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import javax.sql.DataSource;
