@@ -7,6 +7,7 @@ package br.ufscar.dc.atv1.dao;
 import br.ufscar.dc.atv1.login.JDBCUtil;
 import br.ufscar.dc.atv1.model.Teatro;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,10 +23,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class TeatroDAO {
     
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    private final DataSource dataSource;
-    
-    public TeatroDAO() throws ClassNotFoundException {
-        dataSource = JDBCUtil.getDataSource();
+    public TeatroDAO() {
+        try {
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected Connection getConnection() throws SQLException {
+        return DriverManager.getConnection("jdbc:derby://localhost:1527/SiteIngressos", "root", "root");
     }
 
 
@@ -35,7 +42,7 @@ public class TeatroDAO {
         String sqlPapel = "Insert into Papel (email, nome) values (?,?)";
         try {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);            
             statement.setString(1, teatro.getEmail());
             statement.setString(2, teatro.getCNPJ());
@@ -67,7 +74,7 @@ public class TeatroDAO {
         List<Teatro> listaTeatros = new ArrayList<>();
         String sql = "SELECT * FROM Teatro";
         try {
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             Statement statement = conn.createStatement();            
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
@@ -93,7 +100,7 @@ public class TeatroDAO {
         String sqlUser = "DELETE FROM Usuario WHERE email = ?";
         String sqlPapel = "DELETE FROM Pepel WHERE email = ?";
         try {
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, teatro.getCNPJ());
             statement.executeUpdate();
@@ -121,7 +128,7 @@ public class TeatroDAO {
         
         String sqlUser = "UPDATE Usuario SET senha = ? WHERE email = ?";
         try {
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, teatro.getNome());            
             statement.setString(2, teatro.getCidade());
@@ -145,7 +152,7 @@ public class TeatroDAO {
         Teatro teatro = null;
         String sql = "SELECT * FROM Teatro WHERE cnpj = ?";
         try {
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, cnpj);
             ResultSet resultSet = statement.executeQuery();
@@ -168,7 +175,7 @@ public class TeatroDAO {
         List<Teatro> listaTeatros = new ArrayList<>();
         String sql = "SELECT * FROM Teatro WHERE cidade = ?";
         try {
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, city);
             ResultSet resultSet = statement.executeQuery();
@@ -192,7 +199,7 @@ public class TeatroDAO {
         List<String> listaCidades = new ArrayList<>();
         String sql = "SELECT DISTINCT cidade FROM Teatro";
         try {
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             Statement statement = conn.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
@@ -212,7 +219,7 @@ public class TeatroDAO {
         String senha = null;
         String sql = "SELECT senha FROM Usuario WHERE email = (SELECT email FROM teatro WHERE cnpj = ?)";
         try {
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, cnpj);
             ResultSet resultSet = statement.executeQuery();

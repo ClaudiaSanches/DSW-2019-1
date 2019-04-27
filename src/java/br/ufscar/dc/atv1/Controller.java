@@ -26,17 +26,10 @@ public class Controller extends HttpServlet {
     
     @Override
     public void init() {
-        try {
-            sitedao = new SiteDAO();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            teatrodao = new TeatroDAO();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        sitedao = new SiteDAO();
+        teatrodao = new TeatroDAO();
         promocaodao = new PromocaoDAO();
+     
     }
 
     
@@ -89,25 +82,25 @@ public class Controller extends HttpServlet {
                 case "/admin/listaTeatros":
                     listaTeatros(request, response);                    
                     break;                                 
-                case "/teatro/cadastroPromocao":
+                case "/cadastroPromocao":
                     apresentaFormCadastroPromocao(request, response);
                     break;                                
-                case "/teatro/insercaoPromocao":
+                case "/insercaoPromocao":
                     inserePromocao(request, response);
                     break;                                
-                case "/teatro/remocaoPromocao":
+                case "/remocaoPromocao":
                     removePromocao(request, response);
                     break;                                
-                case "/teatro/edicaoPromocao":
+                case "/edicaoPromocao":
                     apresentaFormEdicaoPromocao(request, response);
                     break;                                
-                case "/teatro/atualizacaoPromocao":
+                case "/atualizacaoPromocao":
                     atualizePromocao(request, response);
                     break;
-                case "/site/listaPromocoesSite":
+                case "/listaPromocoesSite":
                     listaPromocoesSite(request, response);
                     break;     
-                case "/teatro/listaPromocoesTeatro":
+                case "/listaPromocoesTeatro":
                     listaPromocoesTeatro(request, response);
                     break;
                 case "/listaTodasPromocoes":
@@ -267,16 +260,28 @@ public class Controller extends HttpServlet {
     private void inserePromocao(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        int id = Integer.parseInt(request.getParameter("id"));
         String url = request.getParameter("url");
         String cnpj = request.getParameter("cnpj");
         String nome = request.getParameter("nome");
-        Float preco = Float.parseFloat(request.getParameter("preco"));
-        String diahorario = request.getParameter("diahorario");
-
-        Promocao promocao = new Promocao(id, nome, preco, diahorario, url, cnpj);
-        promocaodao.insert(promocao);
-        response.sendRedirect("listaPromocao");
+        double preco = Double.parseDouble(request.getParameter("preco"));
+        String dia = request.getParameter("dia");
+        String horario = request.getParameter("hora");
+        String diahorario = dia.concat(" "+horario);
+        Promocao promocao = new Promocao(nome, preco, diahorario, url, cnpj);
+        int menssagem = promocaodao.insert(promocao);
+        if(menssagem == 0){
+            request.setAttribute("menssagem", "Não cadastrado: Ja há promoções no dia/horario cadastrada para esse site ou teatro");
+            request.setAttribute("sucesso", 0);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/gerenciaPromocao.jsp");
+            dispatcher.forward(request, response);
+            
+        }
+        else{
+            request.setAttribute("menssagem", "Cadastrado com sucesso");
+            request.setAttribute("sucesso", 1);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("teatro/gerenciaPromocao.jsp");
+            dispatcher.forward(request, response);
+        }
     }
 
     private void atualizeSite(HttpServletRequest request, HttpServletResponse response)
@@ -316,7 +321,7 @@ public class Controller extends HttpServlet {
         String url = request.getParameter("url");
         String cnpj = request.getParameter("cnpj");
         String nome = request.getParameter("nome");
-        Float preco = Float.parseFloat(request.getParameter("preco"));
+        double preco = Double.parseDouble(request.getParameter("preco"));
         String diahorario = request.getParameter("diahorario");
 
         Promocao promocao = new Promocao(id, nome, preco, diahorario, url, cnpj);

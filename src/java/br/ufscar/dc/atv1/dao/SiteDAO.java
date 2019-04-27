@@ -21,12 +21,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class SiteDAO {
     
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    private final DataSource dataSource;
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();    
     
-    
-    public SiteDAO() throws ClassNotFoundException {
-        dataSource = JDBCUtil.getDataSource();
+    public SiteDAO() {
+        try {
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected Connection getConnection() throws SQLException {
+        return DriverManager.getConnection("jdbc:derby://localhost:1527/SiteIngressos", "root", "root");
     }
     
 
@@ -37,7 +43,7 @@ public class SiteDAO {
         
 
         try {
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, site.getEmail());
             statement.setString(2, site.getUrl());
@@ -69,7 +75,7 @@ public class SiteDAO {
         List<Site> listaSites = new ArrayList<>();
         String sql = "SELECT * FROM Site";
         try {
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             Statement statement = conn.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
@@ -94,7 +100,7 @@ public class SiteDAO {
         String sqlUser = "DELETE FROM Usuario WHERE email = ?";
         String sqlPapel = "DELETE FROM Pepel WHERE email = ?";
         try {
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, site.getUrl());
             statement.executeUpdate();
@@ -122,7 +128,7 @@ public class SiteDAO {
         
         String sqlUser = "UPDATE Usuario SET senha = ? WHERE email = ?";
         try {
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, site.getNome());
             statement.setString(2, site.getEmail());
@@ -147,7 +153,7 @@ public class SiteDAO {
         Site site = null;
         String sql = "SELECT * FROM Site WHERE url = ?";
         try {
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, url);
             ResultSet resultSet = statement.executeQuery();
@@ -169,7 +175,7 @@ public class SiteDAO {
         String senha = null;
         String sql = "SELECT senha FROM Usuario WHERE email = (SELECT email FROM site WHERE url = ?)";
         try {
-            Connection conn = dataSource.getConnection();
+            Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, url);
             ResultSet resultSet = statement.executeQuery();
