@@ -1,0 +1,8 @@
+banco de dados nome: SiteIngressos
+senha e usuario: root
+script banco de dados: BD.sql
+classe CriaUsuario: 
+admin@admin - senha admin
+teatro@teatro - senha teatro
+site@site - senha site
+

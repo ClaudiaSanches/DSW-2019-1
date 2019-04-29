@@ -11,14 +11,12 @@ package br.ufscar.dc.atv1.model;
  */
 public class Teatro {
     private String email;
-    private String senha;
     private String CNPJ;
     private String nome;
     private String cidade;
 
-    public Teatro(String email, String senha, String CNPJ, String nome, String cidade) {
+    public Teatro(String email, String CNPJ, String nome, String cidade) {
         this.email = email;
-        this.senha = senha;
         this.CNPJ = CNPJ;
         this.nome = nome;
         this.cidade = cidade;
@@ -37,13 +35,6 @@ public class Teatro {
         this.email = email;
     }
 
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
 
     public String getCNPJ() {
         return CNPJ;

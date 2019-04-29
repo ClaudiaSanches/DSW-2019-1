@@ -1,9 +1,13 @@
 package br.ufscar.dc.atv1.servlet;
 
+import br.ufscar.dc.atv1.Controller;
 import br.ufscar.dc.atv1.DynamicSelectBean;
+import br.ufscar.dc.atv1.dao.TeatroDAO;
 import br.ufscar.dc.atv1.model.Teatro;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,17 +18,18 @@ import javax.servlet.http.HttpServletResponse;
 public class CidadeServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException{
 
+        DynamicSelectBean dyn = new DynamicSelectBean();
         response.setContentType("text/html;charset=UTF-8");
         String cidade = request.getParameter("cidade");
         String buffer = "";
         List<Teatro> teatros;
         if("null".equals(cidade)){
-            teatros = new DynamicSelectBean().getTeatros();
+           teatros = dyn.getTeatros();
         }
         else{
-            teatros = new DynamicSelectBean().getTeatrosByCity(cidade);
+            teatros = dyn.getTeatrosByCity(cidade);
         }
         for (Teatro teatro : teatros) {
             buffer = buffer + "<tr><td>"+teatro.getNome()+"</td><td>"+teatro.getCNPJ()+"</td><td>"+teatro.getCidade()+"</td><td>"+teatro.getEmail()+"</td></tr>";

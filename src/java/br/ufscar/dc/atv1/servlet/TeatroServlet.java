@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 public class TeatroServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException{
 
         response.setContentType("text/html;charset=UTF-8");
         String teatro = request.getParameter("teatro");
@@ -27,7 +27,7 @@ public class TeatroServlet extends HttpServlet {
             promocoes = new DynamicSelectBean().getPromocoesByCnpj(teatro);
         }
         for (Promocao promocao : promocoes) {
-            buffer = buffer + "<tr><td>"+promocao.getPeça()+"</td><td>"+Float.toString(promocao.getPreço())+"</td><td>"+promocao.getDiahorario()+"</td><td>"+new DynamicSelectBean().getSiteNome(promocao.getSite())+"</td><td>"+new DynamicSelectBean().getTeatroNome(promocao.getTeatro())+"</td></tr>";
+            buffer = buffer + "<tr><td>"+promocao.getPeça()+"</td><td>"+Double.toString(promocao.getPreço())+"</td><td>"+promocao.getDiahorario()+"</td><td>"+new DynamicSelectBean().getSiteNome(promocao.getSite())+"</td><td>"+new DynamicSelectBean().getTeatroNome(promocao.getTeatro())+"</td></tr>";
         }   
         response.getWriter().println(buffer);
     }
